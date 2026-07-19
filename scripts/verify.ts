@@ -44,8 +44,7 @@ async function main(): Promise<void> {
     receiptSucceeded: receipt.status === 1,
     bytecodePresent: code !== "0x",
     owner,
-    ownerMatches:
-      owner.toLowerCase() === deployment.deployer.toLowerCase(),
+    ownerMatches: owner.toLowerCase() === deployment.deployer.toLowerCase(),
     message,
     messageMatches: message === deployment.initialMessage,
     updatedAt
@@ -62,9 +61,7 @@ async function main(): Promise<void> {
     .map(([name]) => name);
 
   if (failedChecks.length > 0) {
-    throw new Error(
-      `Onchain verification failed: ${failedChecks.join(", ")}.`
-    );
+    throw new Error(`Onchain verification failed: ${failedChecks.join(", ")}.`);
   }
 
   const report = renderDeploymentReport(result);
@@ -80,4 +77,3 @@ main().catch((error: unknown) => {
   );
   process.exitCode = 1;
 });
-

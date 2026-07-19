@@ -14,9 +14,7 @@ export function validatePrivateKey(value: string | undefined): string {
   }
 
   if (!PRIVATE_KEY_PATTERN.test(value)) {
-    throw new Error(
-      "PRIVATE_KEY must be a 0x-prefixed 32-byte testnet key."
-    );
+    throw new Error("PRIVATE_KEY must be a 0x-prefixed 32-byte testnet key.");
   }
 
   return value;
@@ -35,9 +33,9 @@ export function readPrivateKey(
   return validatePrivateKey(values.PRIVATE_KEY);
 }
 
-export function createTestWallet(
-  environmentPath = resolve(".env.local")
-): { address: string } {
+export function createTestWallet(environmentPath = resolve(".env.local")): {
+  address: string;
+} {
   if (existsSync(environmentPath)) {
     throw new Error(
       "A local wallet already exists. Keep it, or remove .env.local manually if you intentionally want a new test wallet."
@@ -54,4 +52,3 @@ export function createTestWallet(
 
   return { address: wallet.address };
 }
-

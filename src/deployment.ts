@@ -5,8 +5,7 @@ import { isAddress, isHexString } from "ethers";
 
 import { ARC_TESTNET } from "./arc";
 
-export const INITIAL_MESSAGE =
-  "Learning Arc by testing a real deployment.";
+export const INITIAL_MESSAGE = "Learning Arc by testing a real deployment.";
 
 export interface DeploymentRecord {
   network: "Arc Testnet";
@@ -29,10 +28,7 @@ function requireObject(value: unknown): Record<string, unknown> {
   return value as Record<string, unknown>;
 }
 
-function requireString(
-  record: Record<string, unknown>,
-  field: string
-): string {
+function requireString(record: Record<string, unknown>, field: string): string {
   const value = record[field];
   if (typeof value !== "string" || value.trim() === "") {
     throw new Error(`${field} must be a non-empty string.`);
@@ -87,9 +83,7 @@ export function validateDeploymentRecord(value: unknown): DeploymentRecord {
 
   const expectedTransactionUrl = `${ARC_TESTNET.explorerUrl}/tx/${transactionHash}`;
   if (transactionUrl !== expectedTransactionUrl) {
-    throw new Error(
-      `transactionUrl must be ${expectedTransactionUrl}.`
-    );
+    throw new Error(`transactionUrl must be ${expectedTransactionUrl}.`);
   }
 
   const expectedContractUrl = `${ARC_TESTNET.explorerUrl}/address/${contractAddress}`;

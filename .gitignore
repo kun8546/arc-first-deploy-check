@@ -7,5 +7,3 @@ typechain-types/
 .env
 .env.*
 !.env.example
-deployment.json
-deployment-report.md

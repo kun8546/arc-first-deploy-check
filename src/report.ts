@@ -69,4 +69,3 @@ npm run verify
 \`\`\`
 `;
 }
-

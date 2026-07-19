@@ -32,6 +32,7 @@
     "eslint": "10.7.0",
     "hardhat": "2.28.6",
     "prettier": "3.9.5",
+    "prettier-plugin-solidity": "2.3.1",
     "solidity-coverage": "0.8.17",
     "ts-node": "10.9.2",
     "tsx": "4.23.1",

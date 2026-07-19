@@ -3,7 +3,6 @@ import { expect } from "chai";
 import { renderDeploymentReport } from "../src/report";
 import { validDeployment } from "./fixtures";
 
-
 describe("deployment verification report", function () {
   it("renders public evidence and every successful check", function () {
     const report = renderDeploymentReport({

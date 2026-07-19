@@ -1,6 +1,9 @@
 import { expect } from "chai";
 
-import { validateDeploymentReceipt } from "../src/verification";
+import {
+  validateDeploymentReceipt,
+  validateRuntimeBytecode
+} from "../src/verification";
 import { validDeployment } from "./fixtures";
 
 const validReceipt = {
@@ -50,5 +53,17 @@ describe("deployment receipt binding", function () {
         blockNumber: validDeployment.blockNumber + 1
       })
     ).to.throw("receipt block number does not match deployment.json");
+  });
+
+  it("accepts only the runtime bytecode compiled for this contract", function () {
+    expect(() =>
+      validateRuntimeBytecode("0x6001600055", "0x6001600055")
+    ).not.to.throw();
+    expect(() =>
+      validateRuntimeBytecode("0x6001600055", "0x6002600055")
+    ).to.throw("does not match the compiled ArcLearningLog contract");
+    expect(() => validateRuntimeBytecode("0x", "0x6001600055")).to.throw(
+      "Compiled runtime bytecode is missing"
+    );
   });
 });

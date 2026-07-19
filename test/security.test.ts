@@ -24,10 +24,14 @@ describe("repository secret checks", function () {
 
   it("detects common wallet and deployer key assignments", function () {
     const deployerKey = `const deployerKey = "0x${"f".repeat(64)}";`;
+    const genericKey = `const key = "0x${"2".repeat(64)}";`;
     const walletConstructor = `new Wallet("0x${"1".repeat(64)}")`;
+    const signingKeyConstructor = `new SigningKey("0x${"3".repeat(64)}")`;
 
     expect(containsLikelyPrivateKey(deployerKey)).to.equal(true);
+    expect(containsLikelyPrivateKey(genericKey)).to.equal(true);
     expect(containsLikelyPrivateKey(walletConstructor)).to.equal(true);
+    expect(containsLikelyPrivateKey(signingKeyConstructor)).to.equal(true);
   });
 
   it("does not confuse public addresses or transaction hashes for keys", function () {

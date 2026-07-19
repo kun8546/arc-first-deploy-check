@@ -3,8 +3,9 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 const PRIVATE_KEY_ASSIGNMENT =
-  /["']?[A-Za-z0-9_]*(?:private|secret|wallet|signer|deployer)[A-Za-z0-9_]*["']?\s*(?:=|:)\s*["']?0x[0-9a-fA-F]{64}\b/i;
-const WALLET_CONSTRUCTOR = /new\s+Wallet\s*\(\s*["']0x[0-9a-fA-F]{64}\b/i;
+  /["']?(?:[A-Za-z0-9_]*(?:private|secret|wallet|signer|deployer)[A-Za-z0-9_]*|key)["']?\s*(?:=|:)\s*["']?0x[0-9a-fA-F]{64}\b/i;
+const KEY_CONSTRUCTOR =
+  /new\s+(?:Wallet|SigningKey)\s*\(\s*["']0x[0-9a-fA-F]{64}\b/i;
 
 function listGitFiles(root: string, args: string[]): string[] {
   const output = execFileSync("git", [...args, "-z"], {
@@ -24,9 +25,7 @@ function isForbiddenTrackedEnvironmentFile(filePath: string): boolean {
 }
 
 export function containsLikelyPrivateKey(content: string): boolean {
-  return (
-    PRIVATE_KEY_ASSIGNMENT.test(content) || WALLET_CONSTRUCTOR.test(content)
-  );
+  return PRIVATE_KEY_ASSIGNMENT.test(content) || KEY_CONSTRUCTOR.test(content);
 }
 
 export function findUnsafeTrackedFiles(root = process.cwd()): string[] {

@@ -1,0 +1,19 @@
+title = "Arc first deploy secret detection"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "ethereum-private-key"
+description = "Ethereum-style private key assigned to a key variable or constructor"
+regex = '''(?i)(private|secret|wallet|signer|deployer|key|SigningKey)[A-Za-z0-9_]*[[:space:]]*(=|:|\()[[:space:]]*["']?(0x[0-9a-f]{64})'''
+secretGroup = 3
+keywords = [
+  "private",
+  "secret",
+  "wallet",
+  "signer",
+  "deployer",
+  "key",
+  "SigningKey",
+]

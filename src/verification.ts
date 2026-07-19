@@ -42,3 +42,20 @@ export function validateDeploymentReceipt<T extends DeploymentReceiptEvidence>(
 
   return receipt;
 }
+
+export function validateRuntimeBytecode(
+  compiledBytecode: string,
+  deployedBytecode: string
+): void {
+  if (compiledBytecode === "0x" || compiledBytecode.length <= 2) {
+    throw new Error(
+      "Compiled runtime bytecode is missing. Run npm run compile first."
+    );
+  }
+
+  if (compiledBytecode.toLowerCase() !== deployedBytecode.toLowerCase()) {
+    throw new Error(
+      "The deployed runtime bytecode does not match the compiled ArcLearningLog contract."
+    );
+  }
+}

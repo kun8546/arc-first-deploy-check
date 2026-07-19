@@ -14,7 +14,7 @@ transaction and contract links.
 - Create a separate testnet-only wallet.
 - Check the wallet's native testnet USDC balance.
 - Deploy the contract to Arc Testnet.
-- Verify the receipt, bytecode, owner, message, and timestamp.
+- Verify the receipt, compiled runtime bytecode, owner, message, and timestamp.
 - Generate public deployment evidence.
 - Check that private keys are not included in Git files.
 
@@ -85,8 +85,11 @@ The wallet created by this project is only for Arc Testnet.
 
 - Do not send real assets to it.
 - Do not paste its private key into a website, chat, issue, or README.
-- The private key stays in `.env.local`, which Git ignores.
+- The private key stays in `.env.local`, which Git ignores and restricts to
+  the current Windows user.
 - Run `npm run security:check` before every push.
+- GitHub Actions scans the full Git history with Gitleaks and audits runtime
+  dependencies on every push and pull request.
 
 ## License
 

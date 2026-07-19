@@ -49,6 +49,22 @@ describe("deployment metadata", function () {
     ).to.throw("deployedAt must be an ISO timestamp");
   });
 
+  it("rejects a multiline or excessively long evidence message", function () {
+    expect(() =>
+      validateDeploymentRecord({
+        ...validDeployment,
+        initialMessage: "first line\nsecond line"
+      })
+    ).to.throw("initialMessage must be a single line");
+
+    expect(() =>
+      validateDeploymentRecord({
+        ...validDeployment,
+        initialMessage: "a".repeat(201)
+      })
+    ).to.throw("initialMessage must be 200 characters or fewer");
+  });
+
   it("writes validated public metadata as formatted JSON", function () {
     const directory = mkdtempSync(join(tmpdir(), "arc-deployment-test-"));
     const outputPath = join(directory, "deployment.json");

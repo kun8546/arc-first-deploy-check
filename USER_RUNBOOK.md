@@ -187,6 +187,7 @@ occurred, but remove addresses or information you do not want to publish.
 ```powershell
 npm run check
 npm run security:check
+npm audit --omit=dev --audit-level=high
 git status --short
 ```
 
@@ -195,6 +196,7 @@ Required result:
 - all tests pass;
 - formatting, linting, compilation, and type checking pass;
 - security check says no tracked secrets were found;
+- the runtime dependency audit reports `found 0 vulnerabilities`;
 - `.env.local` does not appear in `git status`.
 
 Stop if `.env.local` appears. Do not use `git add -f` on any environment file.

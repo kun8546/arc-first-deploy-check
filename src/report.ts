@@ -7,6 +7,7 @@ export interface VerificationResult {
   receiptCreatedContract: boolean;
   receiptSentByDeployer: boolean;
   receiptMatchesBlock: boolean;
+  runtimeBytecodeMatches: boolean;
   bytecodePresent: boolean;
   owner: string;
   ownerMatches: boolean;
@@ -22,6 +23,7 @@ export function renderDeploymentReport(result: VerificationResult): string {
     result.receiptCreatedContract,
     result.receiptSentByDeployer,
     result.receiptMatchesBlock,
+    result.runtimeBytecodeMatches,
     result.bytecodePresent,
     result.ownerMatches,
     result.messageMatches,
@@ -35,6 +37,7 @@ export function renderDeploymentReport(result: VerificationResult): string {
   }
 
   const { deployment } = result;
+  const escapedMessage = result.message.replace(/[\\`*_[\]()<>!]/g, "\\$&");
 
   return `# Arc Testnet Deployment Verification
 
@@ -62,6 +65,7 @@ directly from the Arc Testnet RPC.
 - [x] Receipt created the recorded contract
 - [x] Receipt sender matches the deployer
 - [x] Receipt block matches the deployment
+- [x] Runtime bytecode matches the compiled contract
 - [x] Contract bytecode exists
 - [x] Onchain owner matches the deployer
 - [x] Onchain message matches the deployment
@@ -70,7 +74,7 @@ directly from the Arc Testnet RPC.
 ## Onchain Values
 
 - **Owner:** \`${result.owner}\`
-- **Message:** ${result.message}
+- **Message:** ${escapedMessage}
 - **Updated at:** ${result.updatedAt}
 
 ## Reproduce

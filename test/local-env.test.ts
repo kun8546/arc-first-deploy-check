@@ -6,6 +6,7 @@ import { join } from "node:path";
 import { Wallet } from "ethers";
 
 import {
+  buildWindowsWalletAclArguments,
   createTestWallet,
   readPrivateKey,
   validatePrivateKey
@@ -33,6 +34,20 @@ describe("local test wallet storage", function () {
       address: new Wallet(privateKey).address
     });
     expect(content).to.match(/^PRIVATE_KEY=0x[0-9a-fA-F]{64}\r?\n$/);
+  });
+
+  it("builds a Windows ACL that removes inheritance and grants one user", function () {
+    expect(
+      buildWindowsWalletAclArguments(
+        "C:\\project\\.env.local",
+        "DESKTOP\\student"
+      )
+    ).to.deep.equal([
+      "C:\\project\\.env.local",
+      "/inheritance:r",
+      "/grant:r",
+      "DESKTOP\\student:(F)"
+    ]);
   });
 
   it("does not overwrite an existing local wallet", function () {

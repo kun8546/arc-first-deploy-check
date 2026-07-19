@@ -1,10 +1,34 @@
+import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { userInfo } from "node:os";
 import { dirname, resolve } from "node:path";
 
 import { parse } from "dotenv";
 import { Wallet } from "ethers";
 
 const PRIVATE_KEY_PATTERN = /^0x[0-9a-fA-F]{64}$/;
+
+export function buildWindowsWalletAclArguments(
+  filePath: string,
+  identity: string
+): string[] {
+  return [filePath, "/inheritance:r", "/grant:r", `${identity}:(F)`];
+}
+
+function protectWalletFile(filePath: string): void {
+  if (process.platform !== "win32") {
+    return;
+  }
+
+  const username = process.env.USERNAME ?? userInfo().username;
+  const identity = process.env.USERDOMAIN
+    ? `${process.env.USERDOMAIN}\\${username}`
+    : username;
+
+  execFileSync("icacls", buildWindowsWalletAclArguments(filePath, identity), {
+    stdio: "ignore"
+  });
+}
 
 export function validatePrivateKey(value: string | undefined): string {
   if (value === undefined || value.trim() === "") {
@@ -49,6 +73,7 @@ export function createTestWallet(environmentPath = resolve(".env.local")): {
     flag: "wx",
     mode: 0o600
   });
+  protectWalletFile(environmentPath);
 
   return { address: wallet.address };
 }

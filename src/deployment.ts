@@ -78,6 +78,13 @@ export function validateDeploymentRecord(value: unknown): DeploymentRecord {
   }
 
   const initialMessage = requireString(record, "initialMessage");
+  if (/[\r\n]/.test(initialMessage)) {
+    throw new Error("initialMessage must be a single line.");
+  }
+  if (initialMessage.length > 200) {
+    throw new Error("initialMessage must be 200 characters or fewer.");
+  }
+
   const transactionUrl = requireString(record, "transactionUrl");
   const contractUrl = requireString(record, "contractUrl");
 

@@ -3,6 +3,10 @@ import type { DeploymentRecord } from "./deployment";
 export interface VerificationResult {
   deployment: DeploymentRecord;
   receiptSucceeded: boolean;
+  receiptMatchesTransaction: boolean;
+  receiptCreatedContract: boolean;
+  receiptSentByDeployer: boolean;
+  receiptMatchesBlock: boolean;
   bytecodePresent: boolean;
   owner: string;
   ownerMatches: boolean;
@@ -14,6 +18,10 @@ export interface VerificationResult {
 export function renderDeploymentReport(result: VerificationResult): string {
   const checks = [
     result.receiptSucceeded,
+    result.receiptMatchesTransaction,
+    result.receiptCreatedContract,
+    result.receiptSentByDeployer,
+    result.receiptMatchesBlock,
     result.bytecodePresent,
     result.ownerMatches,
     result.messageMatches,
@@ -50,6 +58,10 @@ directly from the Arc Testnet RPC.
 ## Verification Checks
 
 - [x] Transaction receipt succeeded
+- [x] Receipt transaction hash matches the deployment
+- [x] Receipt created the recorded contract
+- [x] Receipt sender matches the deployer
+- [x] Receipt block matches the deployment
 - [x] Contract bytecode exists
 - [x] Onchain owner matches the deployer
 - [x] Onchain message matches the deployment

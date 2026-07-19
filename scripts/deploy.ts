@@ -7,6 +7,7 @@ import {
   type DeploymentRecord,
   writeDeploymentRecord
 } from "../src/deployment";
+import { formatCliError } from "../src/errors";
 
 async function main(): Promise<void> {
   if (process.env.CONFIRM_ARC_TESTNET_DEPLOY !== "yes") {
@@ -76,6 +77,6 @@ async function main(): Promise<void> {
 }
 
 main().catch((error: unknown) => {
-  console.error(error instanceof Error ? error.message : "Deployment failed.");
+  console.error(formatCliError(error, "Deployment"));
   process.exitCode = 1;
 });

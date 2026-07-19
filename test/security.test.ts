@@ -16,6 +16,20 @@ describe("repository secret checks", function () {
     expect(containsLikelyPrivateKey(secret)).to.equal(true);
   });
 
+  it("detects a private key under a quoted JSON property", function () {
+    const secret = `{"PRIVATE_KEY":"0x${"e".repeat(64)}"}`;
+
+    expect(containsLikelyPrivateKey(secret)).to.equal(true);
+  });
+
+  it("detects common wallet and deployer key assignments", function () {
+    const deployerKey = `const deployerKey = "0x${"f".repeat(64)}";`;
+    const walletConstructor = `new Wallet("0x${"1".repeat(64)}")`;
+
+    expect(containsLikelyPrivateKey(deployerKey)).to.equal(true);
+    expect(containsLikelyPrivateKey(walletConstructor)).to.equal(true);
+  });
+
   it("does not confuse public addresses or transaction hashes for keys", function () {
     const publicEvidence = [
       "contract=0x1111111111111111111111111111111111111111",
@@ -54,6 +68,28 @@ describe("repository secret checks", function () {
 
       expect(unsafeFiles).to.have.members([".env.local", "src/unsafe.ts"]);
       expect(unsafeFiles.join("\n")).not.to.include(secret);
+    } finally {
+      rmSync(directory, { recursive: true, force: true });
+    }
+  });
+
+  it("does not skip a key near the end of a large tracked file", function () {
+    const directory = mkdtempSync(join(tmpdir(), "arc-security-large-"));
+    const secret = `const walletKey = "0x${"2".repeat(64)}";`;
+
+    try {
+      execFileSync("git", ["init"], { cwd: directory, stdio: "ignore" });
+      writeFileSync(
+        join(directory, "large.txt"),
+        `${"safe content\n".repeat(100_000)}${secret}\n`,
+        "utf8"
+      );
+      execFileSync("git", ["add", "large.txt"], {
+        cwd: directory,
+        stdio: "ignore"
+      });
+
+      expect(findUnsafeTrackedFiles(directory)).to.deep.equal(["large.txt"]);
     } finally {
       rmSync(directory, { recursive: true, force: true });
     }

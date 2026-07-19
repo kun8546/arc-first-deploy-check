@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 import { isAddress, isHexString } from "ethers";
@@ -108,6 +108,10 @@ export function validateDeploymentRecord(value: unknown): DeploymentRecord {
 export function readDeploymentRecord(
   inputPath = resolve("deployment.json")
 ): DeploymentRecord {
+  if (!existsSync(inputPath)) {
+    throw new Error("No deployment metadata found. Run npm run deploy first.");
+  }
+
   const parsed: unknown = JSON.parse(readFileSync(inputPath, "utf8"));
   return validateDeploymentRecord(parsed);
 }

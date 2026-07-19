@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 import {
+  readDeploymentRecord,
   validateDeploymentRecord,
   writeDeploymentRecord
 } from "../src/deployment";
@@ -56,6 +57,19 @@ describe("deployment metadata", function () {
       writeDeploymentRecord(validDeployment, outputPath);
       expect(readFileSync(outputPath, "utf8")).to.equal(
         `${JSON.stringify(validDeployment, null, 2)}\n`
+      );
+    } finally {
+      rmSync(directory, { recursive: true, force: true });
+    }
+  });
+
+  it("explains that deployment must happen before verification", function () {
+    const directory = mkdtempSync(join(tmpdir(), "arc-deployment-test-"));
+    const missingPath = join(directory, "deployment.json");
+
+    try {
+      expect(() => readDeploymentRecord(missingPath)).to.throw(
+        "No deployment metadata found. Run npm run deploy first."
       );
     } finally {
       rmSync(directory, { recursive: true, force: true });

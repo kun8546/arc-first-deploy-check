@@ -1,6 +1,7 @@
 import { formatUnits, JsonRpcProvider, Wallet } from "ethers";
 
 import { ARC_TESTNET, assertArcChain } from "../src/arc";
+import { formatCliError } from "../src/errors";
 import { readPrivateKey } from "../src/local-env";
 
 async function main(): Promise<void> {
@@ -21,8 +22,6 @@ async function main(): Promise<void> {
 }
 
 main().catch((error: unknown) => {
-  console.error(
-    error instanceof Error ? error.message : "Balance check failed."
-  );
+  console.error(formatCliError(error, "Balance check"));
   process.exitCode = 1;
 });

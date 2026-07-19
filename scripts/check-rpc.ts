@@ -1,6 +1,7 @@
 import { JsonRpcProvider } from "ethers";
 
 import { ARC_TESTNET } from "../src/arc";
+import { formatCliError } from "../src/errors";
 import { validateRpcSnapshot } from "../src/rpc";
 
 async function main(): Promise<void> {
@@ -20,6 +21,6 @@ async function main(): Promise<void> {
 }
 
 main().catch((error: unknown) => {
-  console.error(error instanceof Error ? error.message : "RPC check failed.");
+  console.error(formatCliError(error, "RPC check"));
   process.exitCode = 1;
 });

@@ -8,6 +8,10 @@ describe("deployment verification report", function () {
     const report = renderDeploymentReport({
       deployment: validDeployment,
       receiptSucceeded: true,
+      receiptMatchesTransaction: true,
+      receiptCreatedContract: true,
+      receiptSentByDeployer: true,
+      receiptMatchesBlock: true,
       bytecodePresent: true,
       owner: validDeployment.deployer,
       ownerMatches: true,
@@ -21,6 +25,8 @@ describe("deployment verification report", function () {
     expect(report).to.include(validDeployment.transactionUrl);
     expect(report).to.include(validDeployment.contractUrl);
     expect(report).to.include("- [x] Transaction receipt succeeded");
+    expect(report).to.include("- [x] Receipt created the recorded contract");
+    expect(report).to.include("- [x] Receipt sender matches the deployer");
     expect(report).to.include("- [x] Contract bytecode exists");
     expect(report).to.include("- [x] Onchain owner matches the deployer");
     expect(report).to.include("- [x] Onchain message matches the deployment");
@@ -32,6 +38,10 @@ describe("deployment verification report", function () {
       renderDeploymentReport({
         deployment: validDeployment,
         receiptSucceeded: true,
+        receiptMatchesTransaction: true,
+        receiptCreatedContract: true,
+        receiptSentByDeployer: true,
+        receiptMatchesBlock: true,
         bytecodePresent: false,
         owner: validDeployment.deployer,
         ownerMatches: true,

@@ -5,7 +5,9 @@ import { Contract, JsonRpcProvider } from "ethers";
 
 import { ARC_TESTNET, assertArcChain } from "../src/arc";
 import { readDeploymentRecord } from "../src/deployment";
+import { formatCliError } from "../src/errors";
 import { renderDeploymentReport } from "../src/report";
+import { validateDeploymentReceipt } from "../src/verification";
 
 const ARC_LEARNING_LOG_ABI = [
   "function owner() view returns (address)",
@@ -25,6 +27,7 @@ async function main(): Promise<void> {
   if (receipt === null) {
     throw new Error("The deployment transaction receipt was not found.");
   }
+  validateDeploymentReceipt(deployment, receipt);
 
   const code = await provider.getCode(deployment.contractAddress);
   const contract = new Contract(
@@ -42,6 +45,14 @@ async function main(): Promise<void> {
   const result = {
     deployment,
     receiptSucceeded: receipt.status === 1,
+    receiptMatchesTransaction:
+      receipt.hash.toLowerCase() === deployment.transactionHash.toLowerCase(),
+    receiptCreatedContract:
+      receipt.contractAddress?.toLowerCase() ===
+      deployment.contractAddress.toLowerCase(),
+    receiptSentByDeployer:
+      receipt.from.toLowerCase() === deployment.deployer.toLowerCase(),
+    receiptMatchesBlock: receipt.blockNumber === deployment.blockNumber,
     bytecodePresent: code !== "0x",
     owner,
     ownerMatches: owner.toLowerCase() === deployment.deployer.toLowerCase(),
@@ -72,8 +83,6 @@ async function main(): Promise<void> {
 }
 
 main().catch((error: unknown) => {
-  console.error(
-    error instanceof Error ? error.message : "Verification failed."
-  );
+  console.error(formatCliError(error, "Verification"));
   process.exitCode = 1;
 });

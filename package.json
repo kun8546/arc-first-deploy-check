@@ -1,0 +1,41 @@
+{
+  "name": "arc-first-deploy-check",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A beginner-friendly Arc Testnet deployment and verification project.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "wallet:create": "tsx scripts/create-wallet.ts",
+    "wallet:balance": "tsx scripts/check-balance.ts",
+    "deploy": "hardhat run scripts/deploy.ts --network arcTestnet",
+    "verify": "tsx scripts/verify.ts",
+    "security:check": "tsx scripts/security-check.ts",
+    "rpc:check": "tsx scripts/check-rpc.ts",
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm run compile && npm test && npm run security:check"
+  },
+  "dependencies": {
+    "dotenv": "17.4.2",
+    "ethers": "6.17.0"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "6.1.2",
+    "@types/node": "24.10.1",
+    "eslint": "10.7.0",
+    "hardhat": "2.28.6",
+    "prettier": "3.9.5",
+    "solidity-coverage": "0.8.17",
+    "ts-node": "10.9.2",
+    "tsx": "4.23.1",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.64.0"
+  }
+}

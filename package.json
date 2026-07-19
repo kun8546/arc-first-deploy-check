@@ -20,7 +20,7 @@
     "verify": "tsx scripts/verify.ts",
     "security:check": "tsx scripts/security-check.ts",
     "rpc:check": "tsx scripts/check-rpc.ts",
-    "check": "npm run format:check && npm run lint && npm run typecheck && npm run compile && npm test && npm run security:check"
+    "check": "npm run format:check && npm run lint && npm run compile && npm run typecheck && npm test && npm run security:check"
   },
   "dependencies": {
     "dotenv": "17.4.2",

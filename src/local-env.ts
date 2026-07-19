@@ -1,5 +1,11 @@
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync
+} from "node:fs";
 import { userInfo } from "node:os";
 import { dirname, resolve } from "node:path";
 
@@ -57,7 +63,10 @@ export function readPrivateKey(
   return validatePrivateKey(values.PRIVATE_KEY);
 }
 
-export function createTestWallet(environmentPath = resolve(".env.local")): {
+export function createTestWallet(
+  environmentPath = resolve(".env.local"),
+  protectFile: (filePath: string) => void = protectWalletFile
+): {
   address: string;
 } {
   if (existsSync(environmentPath)) {
@@ -73,7 +82,15 @@ export function createTestWallet(environmentPath = resolve(".env.local")): {
     flag: "wx",
     mode: 0o600
   });
-  protectWalletFile(environmentPath);
+  try {
+    protectFile(environmentPath);
+  } catch (error: unknown) {
+    rmSync(environmentPath, { force: true });
+    throw new Error(
+      "Could not secure the local wallet file, so it was removed. Check Windows file permissions and run npm run wallet:create again.",
+      { cause: error }
+    );
+  }
 
   return { address: wallet.address };
 }

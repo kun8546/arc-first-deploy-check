@@ -4,7 +4,7 @@ pragma solidity ^0.8.28;
 contract ArcLearningLog {
   error NotOwner(address caller);
 
-  address public immutable owner;
+  address public owner;
   string public message;
   uint256 public updatedAt;
 

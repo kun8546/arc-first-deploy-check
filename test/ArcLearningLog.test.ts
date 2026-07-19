@@ -1,7 +1,9 @@
 import { expect } from "chai";
-import { ethers } from "hardhat";
+import { artifacts, ethers } from "hardhat";
 import { time } from "@nomicfoundation/hardhat-network-helpers";
 import { ArcLearningLog__factory } from "../typechain-types";
+
+import { validateRuntimeBytecode } from "../src/verification";
 
 describe("ArcLearningLog", function () {
   const initialMessage = "Learning Arc by testing a real deployment.";
@@ -25,6 +27,18 @@ describe("ArcLearningLog", function () {
     expect(await contract.owner()).to.equal(owner.address);
     expect(await contract.message()).to.equal(initialMessage);
     expect(await contract.updatedAt()).to.be.greaterThan(0n);
+  });
+
+  it("deploys the exact runtime bytecode produced by this project", async function () {
+    const { contract } = await deployFixture();
+    const artifact = await artifacts.readArtifact("ArcLearningLog");
+    const deployedCode = await ethers.provider.getCode(
+      await contract.getAddress()
+    );
+
+    expect(() =>
+      validateRuntimeBytecode(artifact.deployedBytecode, deployedCode)
+    ).not.to.throw();
   });
 
   it("lets the owner update the message and emits evidence", async function () {

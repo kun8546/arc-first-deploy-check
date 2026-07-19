@@ -1,5 +1,11 @@
 import { expect } from "chai";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -48,6 +54,16 @@ describe("local test wallet storage", function () {
       "/grant:r",
       "DESKTOP\\student:(F)"
     ]);
+  });
+
+  it("removes the wallet file if local permission protection fails", function () {
+    expect(() =>
+      createTestWallet(environmentPath, () => {
+        throw new Error("simulated ACL failure");
+      })
+    ).to.throw("Could not secure the local wallet file");
+
+    expect(existsSync(environmentPath)).to.equal(false);
   });
 
   it("does not overwrite an existing local wallet", function () {

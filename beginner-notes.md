@@ -2,43 +2,60 @@
 
 ## Context
 
-I am a student learning ZK and blockchain development. I mainly use
-TypeScript/JavaScript and C++. This project is my first small test of the Arc
-contract deployment flow.
+I am a Chung-Ang University student and I am studying ZK and blockchain. I
+mostly use TypeScript/JavaScript and C++. This was my first time deploying a
+contract on Arc Testnet.
 
 ## What I Tested
 
-- [ ] Created a separate testnet-only wallet
-- [ ] Requested Arc Testnet USDC from the official Faucet
-- [ ] Ran the Solidity tests locally
-- [ ] Deployed `ArcLearningLog` to Arc Testnet
-- [ ] Checked the transaction in Arcscan
-- [ ] Verified the contract again through the public RPC
+- [x] Created a separate testnet-only wallet
+- [x] Requested Arc Testnet USDC from the official Faucet
+- [x] Ran the Solidity tests locally
+- [x] Deployed `ArcLearningLog` to Arc Testnet
+- [x] Checked the transaction in Arcscan
+- [x] Verified the contract again through the public RPC
 
-## Notes to Complete After the Live Run
+## What Was Clear?
 
-Write one or two sentences for each question after performing the steps.
-Delete this instruction before publishing.
+The network information was clear. I could find the chain ID, RPC, Faucet and
+explorer in one place. The Faucet and deployment steps were also simple after I
+opened the correct project folder.
 
-### What Was Clear?
+## What Was Confusing?
 
-Which part of the official Arc documentation was easy to follow?
+At first I did not know that npm commands must be run inside the project folder.
+I ran them from `C:\Windows\System32`, so npm could not find `package.json`.
 
-### What Was Confusing?
+The public RPC also returned `request limit reached` when I verified again. I
+used another RPC listed in the Arc documentation and made the requests more
+slowly.
 
-Record the exact step, command, or term that was difficult for a beginner.
+## Did an Error Occur?
 
-### Did an Error Occur?
+The first error was:
 
-Include the command and relevant error line. Do not include a private key,
-seed phrase, password, or API key.
+```text
+npm error enoent Could not read package.json
+```
 
-### What Could Improve?
+Later I got:
 
-Suggest one small documentation improvement that would help the next new
-developer complete the same flow.
+```text
+request limit reached
+```
 
-### What Did I Learn?
+After changing the folder and retrying verification with another official RPC,
+the verification passed.
 
-Describe one concrete thing learned about Arc, USDC gas, deployment, or
-onchain verification.
+## What Could Improve?
+
+I think the beginner guide can show the `cd` command before every npm command.
+It can also mention the other RPC endpoints when the main public RPC has a rate
+limit.
+
+## What Did I Learn?
+
+I learned that Arc uses USDC for gas, so I needed testnet USDC before
+deployment. I also learned that only seeing a contract address is not enough.
+The transaction receipt, bytecode, owner and message can be checked again from
+the RPC.

@@ -1,0 +1,12 @@
+{
+  "network": "Arc Testnet",
+  "chainId": 5042002,
+  "deployer": "0x2e22642FF0D6AbCCfbDa2524B71b7Ba9537204C0",
+  "contractAddress": "0xfCBB6BfF3fFD84b3946731F706444FBF073F23B5",
+  "transactionHash": "0xaa0b595d471fde107c6e5ed9b7cfe5d408a84b920283fd64c423724251e8e342",
+  "blockNumber": 52729793,
+  "deployedAt": "2026-07-20T05:49:33.000Z",
+  "initialMessage": "Learning Arc by testing a real deployment.",
+  "transactionUrl": "https://testnet.arcscan.app/tx/0xaa0b595d471fde107c6e5ed9b7cfe5d408a84b920283fd64c423724251e8e342",
+  "contractUrl": "https://testnet.arcscan.app/address/0xfCBB6BfF3fFD84b3946731F706444FBF073F23B5"
+}
